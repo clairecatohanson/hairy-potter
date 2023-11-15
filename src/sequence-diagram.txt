@@ -1,0 +1,33 @@
+participant index.html
+participant main
+participant PotteryWheel
+participant Kiln
+participant PotteryCatalog
+participant PotteryList
+
+note over main: Repeat the following\nfor each new piece of\npottery (a total of 5 times)
+main->PotteryWheel: invoke makePottery(shape, weight, height)
+main<--PotteryWheel: return a new pottery object with the property values\nspecified in the arguments list
+main->Kiln: invoke firePottery(potteryObject, temperature)
+note over Kiln: add fired property to the potteryObject\nand set its value to true
+note over Kiln: if the temp argument is greater than 2200,\nadd cracked property and set its value to true
+note over Kiln: if the temp argument is less than or equal to\n2200, add cracked property and set its value\nto false
+main<--Kiln: return the updated potteryObject that now includes\nfired and cracked properties
+note over main: Repeat the following\nfor each piece of\npottery (a total of 5 times)
+main->PotteryCatalog: invoke toSellOrNotToSell(potteryObject)
+note over PotteryCatalog: If the potteryObject's cracked property\nis true, do nothing.\nReturn the potteryObject without any \nchanges.
+note over PotteryCatalog:If the potteryObject's crack property\nis true, do one of the following steps:
+note over PotteryCatalog: If potteryObject.weight is greater than\nor equal to 6, add the property of price and \nset its value to 40.
+note over PotteryCatalog: If potteryObject.weight is less than 6,\nadd the property of price and set its value\nto 20.
+note over PotteryCatalog: After updating the price property, push the\nupdated object onto the potteryToSell array\nin PotteryCatalog
+main<--PotteryCatalog: return the potteryObject with any changes that were made.
+main->PotteryList: invoke PotteryList()
+PotteryList->PotteryCatalog: invoke usePottery()
+PotteryList<--PotteryCatalog: return a copy of the\npotteryToSell array, and \nstore it in the variable, \nitemsToSell
+note over PotteryList: Create an empty string and store it\nin the variable, htmlString
+loop
+note over PotteryList: For each item in the itemsToSell array,\nappend a new block of HTML code \ncorresponding to the properties in the item\nonto the htmlString
+end
+main<--PotteryList: return the full htmlString, and store it in the variable, potteryHTMLString
+note over main: Initialize the variable, parentContainer,\nwhich points to the element in index.html\nwith the class of ".potteryList"
+main->index.html: Update the innerHTML of the\nparentContainer element with the string,\npotteryHTMLString
